@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ─── Next.js: type-check + lint + test ──────────────────────────────────────
+  web:
+    name: Web (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test -- --run
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
+          SUPABASE_SERVICE_ROLE_KEY: "placeholder-service-role-key"
+          ANTHROPIC_API_KEY: "placeholder"
+          OPENAI_API_KEY: "placeholder"
+          LANGFUSE_PUBLIC_KEY: "pk-lf-placeholder"
+          LANGFUSE_SECRET_KEY: "sk-lf-placeholder"
+          PYTHON_SERVICE_URL: "http://localhost:8000"
+          PYTHON_SERVICE_SECRET: "placeholder"
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: "https://placeholder.supabase.co"
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: "placeholder-anon-key"
+          SUPABASE_SERVICE_ROLE_KEY: "placeholder-service-role-key"
+          ANTHROPIC_API_KEY: "placeholder"
+          OPENAI_API_KEY: "placeholder"
+          LANGFUSE_PUBLIC_KEY: "pk-lf-placeholder"
+          LANGFUSE_SECRET_KEY: "sk-lf-placeholder"
+          NEXT_PUBLIC_APP_URL: "https://examina.ai"
+          NEXT_PUBLIC_APP_DOMAIN: "examina.ai"
+          PYTHON_SERVICE_URL: "http://localhost:8000"
+          PYTHON_SERVICE_SECRET: "placeholder"
+
+  # ─── Python: lint + test ─────────────────────────────────────────────────
+  python:
+    name: Python (FastAPI)
+    if: hashFiles('python/requirements.txt') != ''
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: python
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: python/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt && pip install pytest pytest-asyncio httpx
+
+      - name: Run tests
+        run: pytest tests/ -v
+        env:
+          ENV: test
+          SERVICE_SECRET: placeholder
+          NEXT_APP_URL: "http://localhost:3000"

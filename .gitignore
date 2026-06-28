@@ -1,0 +1,57 @@
+# ─── Secrets — NEVER commit these ────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+
+# ─── Node / Next.js ───────────────────────────────────────────────────────────
+web/node_modules/
+web/.next/
+web/out/
+web/.vercel/
+web/coverage/
+web/*.tsbuildinfo
+web/next-env.d.ts
+
+# ─── Python ───────────────────────────────────────────────────────────────────
+python/__pycache__/
+python/**/__pycache__/
+python/*.pyc
+python/.venv/
+python/venv/
+python/.pytest_cache/
+python/*.egg-info/
+python/dist/
+python/build/
+
+# ─── Content — processed files & raw source materials stay local ─────────────
+content/processed/
+content/**/*.pdf
+content/**/*.PDF
+content/**/*.jpg
+content/**/*.jpeg
+content/**/*.JPG
+content/**/*.JPEG
+content/**/*.png
+content/**/*.PNG
+content/**/*.heic
+content/**/*.HEIC
+testdata/
+
+# ─── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ─── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Local agent config──────────────────────────────────────────────────────────────
+
+# Temp image render folders
+content/**/tmp_pages/
+content/**/tmp/
+
