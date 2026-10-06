@@ -64,7 +64,6 @@ jobs:
   # ─── Python: lint + test ─────────────────────────────────────────────────
   python:
     name: Python (FastAPI)
-    if: hashFiles('python/requirements.txt') != ''
     runs-on: ubuntu-latest
     defaults:
       run:
